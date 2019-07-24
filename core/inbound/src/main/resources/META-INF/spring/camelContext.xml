@@ -19,7 +19,6 @@
             <jaxb contextPath="com.customer.app" id="personFormat" partClass="com.customer.app.Person"/>
         </dataFormats>
         <!-- this is the route called by DEIMServiceImpl -->
-        <route id="handleRest">
-        </route>
+        <route id="handleRest"/>
     </camelContext>
 </beans>

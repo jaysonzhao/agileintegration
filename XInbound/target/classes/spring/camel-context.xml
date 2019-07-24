@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd">
+	<camelContext id="camel"
+		xmlns="http://camel.apache.org/schema/spring">
+		<dataFormats>
+			<xmljson id="xmljson" />
+			<xmljson id="xmljsonWithOptions" forceTopLevelObject="true"
+				trimSpaces="true" rootName="Person" skipNamespaces="true"
+				removeNamespacePrefixes="true" expandableProperties="number e" />
+		</dataFormats>
+		<restConfiguration bindingMode="off"
+			component="servlet" contextPath="/rest" />
+		<rest apiDocs="true"
+			id="rest-130579d7-1c1b-409c-a496-32d6feb03006" path="/service">
+			<post id="32d64e54-9ae4-42d3-b175-9cfd81733379" uri="/match">
+				<to uri="direct:inbox" />
+			</post>
+		</rest>
+		<route id="_injectroute" streamCache="true">
+			<from id="_fromIR1" uri="direct:inbox" />
+			<unmarshal ref="xmljsonWithOptions"/>
+		    <to uri="mock:json"/>
+			<setExchangePattern id="_setExchangePattern3"
+				pattern="InOnly" />
+			<to id="_to1" uri="amqp:queue:q.empi.deim.in" />
+			<transform id="_transform1">
+				<constant>Processed the data</constant>
+			</transform>
+		</route>
+		<route id="_testroute" streamCache="true">
+			<from id="_fromqueue" uri="amqp:queue:q.empi.deim.in" />
+		    
+			<log id="_log6" message=">> Body : ${body}" />
+		</route>
+
+	</camelContext>
+</beans>

@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1563317774400
+Build-Jdk: 1.8.0_212-3-redhat
+Built-By: Administrator
+Bundle-Description: Parent POM Customer Application
+Bundle-DocURL: http://www.customer.com
+Bundle-ManifestVersion: 2
+Bundle-Name: Customer :: Application :: Core :: XLate
+Bundle-SymbolicName: xlate
+Bundle-Vendor: Customer
+Bundle-Version: 1.0.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Import-Package: com.customer.app;version="[1.0,2)",com.sun.mdm.index.web
+ service;version="[1.0,2)",org.apache.camel;version="[2.15,3)",org.apach
+ e.camel.dataformat.soap.name;version="[2.15,3)",org.w3._2003._05.soap_e
+ nvelope;version="[2.15,3)",org.xmlsoap.schemas.soap.envelope;version="[
+ 2.15,3)"
+Tool: Bnd-1.50.0

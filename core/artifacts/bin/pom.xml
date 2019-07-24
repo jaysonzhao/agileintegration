@@ -12,7 +12,9 @@
   <artifactId>artifacts</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
-
+<properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
   <name>Customer :: Application :: Core :: Artifacts</name>
 
   <build>
@@ -82,8 +84,10 @@
                   <bindingFiles>
                     <bindingFile>${basedir}/src/main/resources/ws/binding.xml</bindingFile>
                   </bindingFiles>
+               
                 </wsdlOption>
               </wsdlOptions>
+               <encoding>UTF-8</encoding>
             </configuration>
           </execution>
         </executions>
