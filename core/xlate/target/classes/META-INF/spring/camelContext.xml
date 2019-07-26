@@ -18,7 +18,6 @@
                 elementNameStrategyRef="serviceStrategy" id="nextgateFormat"/>
             <jaxb contextPath="com.customer.app" id="personFormat" partClass="com.customer.app.Person"/>
         </dataFormats>
-        <route id="translate">
-        </route>
+        <route id="translate"/>
     </camelContext>
 </beans>

@@ -1,0 +1,3 @@
+com\redhat\customer\translate\TransformToExecuteMatch.class
+org\mycompany\AMQPConfiguration.class
+org\mycompany\Application.class

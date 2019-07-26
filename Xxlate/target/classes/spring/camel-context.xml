@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd">
+	<bean
+		class="org.apache.camel.dataformat.soap.name.ServiceInterfaceStrategy"
+		id="serviceStrategy">
+		<constructor-arg
+			value="com.sun.mdm.index.webservice.PersonEJB" />
+		<constructor-arg value="true" />
+	</bean>
+	<bean
+		class="com.redhat.customer.translate.TransformToExecuteMatch"
+		id="personConvertor" />
+	<camelContext id="xlatePerson" trace="false"
+		typeConverterStatisticsEnabled="true"
+		xmlns="http://camel.apache.org/schema/spring">
+		<dataFormats>
+			<soapjaxb contextPath="com.sun.mdm.index.webservice"
+				elementNameStrategyRef="serviceStrategy" id="nextgateFormat" />
+			<jaxb contextPath="com.customer.app" id="personFormat"
+				partClass="com.customer.app.Person" />
+		</dataFormats>
+		<route id="translate" streamCache="true">
+			<from id="_fromqueue" uri="amqp:queue:q.empi.deim.in" />
+			<log id="_log5" message=">> Body : ${body}" />
+			<unmarshal id="_unmarshal1">
+				<jaxb contextPath="com.customer.app"
+					partClass="com.customer.app.Person" />
+			</unmarshal>
+			<to id="_to1" uri="mock:beforetranslate" />
+			<bean ref="personConvertor" />
+			<marshal>
+				<jaxb contextPath="com.sun.mdm.index.webservice"
+					partClass="com.sun.mdm.index.webservice.ExecuteMatchUpdate" />
+			</marshal>
+			<to uri="amqp:queue:q.empi.nextgate.out" />
+			<log id="_log6" message=">> Body : ${body}" />
+		</route>
+	</camelContext>
+</beans>
