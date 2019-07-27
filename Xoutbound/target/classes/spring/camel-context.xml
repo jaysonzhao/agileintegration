@@ -21,28 +21,41 @@
 		xmlns="http://camel.apache.org/schema/spring">
 		<route id="outcall" streamCache="true">
 			<from id="_fromqueue" uri="amqp:queue:q.empi.nextgate.out" />
-			 <onException id="_onException1">
-                <exception>java.net.ConnectException</exception>
-                <redeliveryPolicy maximumRedeliveries="3"/>
-                <continued>
-                    <constant>true</constant>
-                </continued>
-                <log id="_logex" message=">> Exception : ${body}"/>
-                <setExchangePattern id="_setExchangePattern1" pattern="InOnly"/>
-                <to id="_toerror" uri="direct:error"/>
-            </onException>
+			<onException id="_onException1">
+				<exception>java.net.ConnectException</exception>
+				<redeliveryPolicy maximumRedeliveries="3" />
+				<continued>
+					<constant>true</constant>
+				</continued>
+				<log id="_logex" message=">> Exception : ${body}" />
+				<setExchangePattern id="_setExchangePattern1"
+					pattern="InOnly" />
+				<to id="_toerror" uri="direct:error" />
+			</onException>
 			<unmarshal id="_unmarshal1">
 				<jaxb contextPath="com.sun.mdm.index.webservice"
 					partClass="com.sun.mdm.index.webservice.ExecuteMatchUpdate" />
 			</unmarshal>
+
 			<log id="_log6" message=">> Body : ${body}" />
+			<to id="_towscall" uri="direct:wscall" />
+
+		</route>
+		<route id="_wsroute" streamCache="true">
+			<from uri="direct:wscall" />
 			<to id="_to1"
 				uri="cxf:bean:cxfClientEndpoint?dataFormat=PAYLOAD&amp;defaultOperationName=executeMatchUpdate" />
+			<transform id="_transform1">
+				<constant>Processed the data</constant>
+			</transform>
+			<to id="_to3" uri="mock:personxml" />
+
 		</route>
 		<route id="_errorroute" streamCache="true">
-            <from id="_fromIR1" uri="direct:error"/>
-            <setExchangePattern id="_setExchangePatternerror" pattern="InOnly"/>
-            <to id="_toerrorq" uri="amqp:queue:q.empi.nextgate.dlq"/>
-        </route>
+			<from id="_fromIR1" uri="direct:error" />
+			<setExchangePattern id="_setExchangePatternerror"
+				pattern="InOnly" />
+			<to id="_toerrorq" uri="amqp:queue:q.empi.nextgate.dlq" />
+		</route>
 	</camelContext>
 </beans>

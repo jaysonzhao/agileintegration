@@ -87,7 +87,7 @@
                 }
               }
             } ],
-            "image" : "mycompany/camel-ose-springboot-xml:snapshot-190727-141535-0404",
+            "image" : "mycompany/camel-ose-springboot-xml:snapshot-190727-152230-0058",
             "imagePullPolicy" : "IfNotPresent",
             "livenessProbe" : {
               "httpGet" : {

@@ -25,7 +25,7 @@ public class ValidateTransformationTest  {
 	@EndpointInject(uri = "mock:personxml")
 	private MockEndpoint resultEndpoint;
 
-	@Produce(uri = "direct:inbox")
+	@Produce(uri = "direct:wscall")
 	private ProducerTemplate startEndpoint;
 
 	@Test
@@ -38,7 +38,7 @@ public class ValidateTransformationTest  {
 		resultEndpoint.expectedBodiesReceived("Processed the data");
 
 		// run test
-		startEndpoint.sendBody(readFile("src/test/data/person.xml"));
+		startEndpoint.sendBody(readFile("src/test/data/batchupdate.xml"));
 
 		// verify results
 		resultEndpoint.assertIsSatisfied();
